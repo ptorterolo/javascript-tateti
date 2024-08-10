@@ -1,17 +1,28 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Parcel Sandbox</title>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" href="styles.css">
-  </head>
+    <head>
+        <title>Parcel Sandbox</title>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet" href="styles.css" />
+    </head>
 
-  <body>
-    <h2 class="text-red-500">Ta te ti</h2>
-    <div id="app">
-      <!-- here goes the tic tac toe markup -->
-    </div>
+    <body class="bg-purple-600">
+        <div id="app">
+            <h2 class="text-6xl my-10 text-center">
+                <span class="block text-amber-400 font-bold">TA</span>
+                <span class="block text-pink-400 font-bold">TE</span
+                ><span class="block text-sky-400 font-bold">TI</span>
+            </h2>
+            <!-- here goes the tic tac toe markup -->
+            <div id="game-status"></div>
+            <div id="game-board"></div>
+            <div id="game-actions" class="text-center">
+                <button id="restart-button" class="btn my-4 bg-blue-500">
+                    Restart Game
+                </button>
+            </div>
+        </div>
 
-    <script type="module" src="index.js"></script>
-  </body>
+        <script type="module" src="index.js"></script>
+    </body>
 </html>
