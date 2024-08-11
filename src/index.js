@@ -46,7 +46,14 @@ class TicTacToeGame {
             const cellDiv = document.createElement('div')
             cellDiv.classList.add('cell')
             cellDiv.setAttribute('data-index', index)
+            cellDiv.setAttribute('role', 'button')
+            cellDiv.setAttribute('aria-label', `Cell ${index + 1}`)
+            cellDiv.setAttribute('tabindex', `0`)
             cellDiv.addEventListener('click', this.handleCellClick.bind(this))
+            cellDiv.addEventListener(
+                'keydown',
+                this.handleCellKeyDown.bind(this)
+            )
             boardElement.appendChild(cellDiv)
         })
     }
@@ -124,6 +131,12 @@ class TicTacToeGame {
         this.statusDisplay.classList.remove('winner', 'draw')
         this.renderBoard()
         this.updateStatusDisplay()
+    }
+
+    handleCellKeyDown(event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+            this.handleCellClick(event)
+        }
     }
 }
 
