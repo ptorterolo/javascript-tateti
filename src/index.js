@@ -10,6 +10,21 @@ class TicTacToeGame {
         this.gameActive = true
         this.lastGameMoves = []
 
+        this.winningConditions = [
+            [0, 1, 2], // Row
+            [3, 4, 5], // Row
+            [6, 7, 8], // Row
+            [0, 3, 6], // Column
+            [1, 4, 7], // Column
+            [2, 5, 8], // Column
+            [0, 4, 8], // Diagonal
+            [2, 4, 6], // Diagonal
+        ]
+
+        this.init()
+    }
+
+    setListeners() {
         this.restartButton.addEventListener(
             'click',
             this.handleRestartGame.bind(this)
@@ -18,21 +33,9 @@ class TicTacToeGame {
             'click',
             this.handleReplayGame.bind(this)
         )
-
-        this.winningConditions = [
-            [0, 1, 2], // Row
-            [3, 4, 5], // Row
-            [6, 7, 8], // Row
-            [0, 3, 6], // Column
-            [1, 4, 7], // Column
-            [2, 5, 8], // Column
-            [0, 4, 8], //Diagonal
-            [2, 4, 6], //Diagonal
-        ]
-
-        this.init()
     }
     init() {
+        this.setListeners()
         this.renderBoard()
         this.updateStatusDisplay()
     }
@@ -77,6 +80,10 @@ class TicTacToeGame {
 
         this.handleCellPlayed(clickedCell, clickedCellIndex)
         this.handleWinnerValidation()
+
+        if (this.replayButton.hasAttribute('disabled')) {
+            this.enableReplayButton()
+        }
     }
 
     handlePlayerChange() {

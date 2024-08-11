@@ -3,33 +3,42 @@
     <head>
         <title>TA TE TI - Suerte para ti!</title>
         <meta charset="UTF-8" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Titan+One&display=swap"
+            rel="stylesheet"
+        />
         <link rel="stylesheet" href="styles.css" />
     </head>
 
     <body class="bg-purple-600">
         <div id="app">
-            <h2 class="text-6xl my-10 text-center">
-                <span class="block text-amber-400 font-bold">TA</span>
-                <span class="block text-pink-400 font-bold">TE</span
-                ><span class="block text-sky-400 font-bold">TI</span>
+            <h2 class="text-6xl my-10 text-center font-titan">
+                <span class="block text-amber-400">TA</span>
+                <span class="block text-pink-400">TE</span
+                ><span class="block text-sky-400">TI</span>
             </h2>
             <!-- here goes the tic tac toe markup -->
             <div
                 id="game-status"
-                class="font-bold my-4 bg-slate-50 rounded-lg p-4 text-center"
+                class="font-lilita text-shadow text-white text-xl my-4 bg-slate-50/25 rounded-lg p-4 text-center"
                 role="status"
             ></div>
             <div id="game-board"></div>
-            <div id="game-actions" class="text-center">
+            <div
+                id="game-actions"
+                class="text-center flex flex-col justify-center"
+            >
                 <button
                     id="restart-button"
-                    class="btn my-4 bg-blue-500 hover:bg-blue-600"
+                    class="btn text-shadow btn-primary my-4"
                 >
                     Volver a empezar
                 </button>
                 <button
                     id="replay-button"
-                    class="btn my-4 bg-slate-500 hover:bg-slate-600 disabled:opacity-50"
+                    class="btn text-shadow btn-secondary my-4 disabled:opacity-50"
                     disabled
                 >
                     Repetir último juego
