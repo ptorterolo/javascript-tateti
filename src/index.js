@@ -1,16 +1,22 @@
 import './styles.css'
 class TicTacToeGame {
-    constructor() {
-        this.board = Array(9).fill(null)
+    constructor(size = 3) {
+        this.boardSize = size ** 2
         this.restartButton = document.getElementById('restart-button')
         this.statusDisplay = document.getElementById('game-status')
+        this.replayButton = document.getElementById('replay-button')
         this.currentPlayer = 'X'
-        this.gameState = ['', '', '', '', '', '', '', '', '']
+        this.gameState = Array(this.boardSize).fill('')
         this.gameActive = true
+        this.lastGameMoves = []
 
         this.restartButton.addEventListener(
             'click',
             this.handleRestartGame.bind(this)
+        )
+        this.replayButton.addEventListener(
+            'click',
+            this.handleReplayGame.bind(this)
         )
 
         this.winningConditions = [
@@ -42,7 +48,7 @@ class TicTacToeGame {
             'px-4'
         )
         boardElement.innerHTML = ''
-        this.board.forEach((_, index) => {
+        for (let index = 0; index < this.boardSize; index++) {
             const cellDiv = document.createElement('div')
             cellDiv.classList.add('cell')
             cellDiv.setAttribute('data-index', index)
@@ -55,7 +61,7 @@ class TicTacToeGame {
                 this.handleCellKeyDown.bind(this)
             )
             boardElement.appendChild(cellDiv)
-        })
+        }
     }
 
     handleCellClick(event) {
@@ -84,6 +90,11 @@ class TicTacToeGame {
         const cellColor =
             this.currentPlayer === 'X' ? 'text-cyan-500' : 'text-amber-500'
         clickedCell.classList.add(cellColor)
+        this.lastGameMoves.push({
+            player: this.currentPlayer,
+            index: clickedCellIndex,
+            color: cellColor,
+        })
     }
 
     handleWinnerValidation() {
@@ -125,9 +136,10 @@ class TicTacToeGame {
     }
 
     handleRestartGame() {
+        this.lastGameMoves = []
         this.gameActive = true
         this.currentPlayer = 'X'
-        this.gameState = ['', '', '', '', '', '', '', '', '']
+        this.gameState = Array(this.boardSize).fill('')
         this.statusDisplay.classList.remove('winner', 'draw')
         this.renderBoard()
         this.updateStatusDisplay()
@@ -137,6 +149,22 @@ class TicTacToeGame {
         if (event.key === 'Enter' || event.key === ' ') {
             this.handleCellClick(event)
         }
+    }
+
+    handleReplayGame() {
+        this.renderBoard()
+        this.gameActive = false
+        const cells = document.querySelectorAll('.cell')
+        this.lastGameMoves.forEach((move, index) => {
+            setTimeout(() => {
+                this.gameState[move.index] = move.player
+                cells[move.index].classList.add(move.color)
+                cells[move.index].innerHTML = move.player
+                if (index === this.lastGameMoves.length - 1) {
+                    this.gameActive = true
+                }
+            }, index * 500)
+        })
     }
 }
 
