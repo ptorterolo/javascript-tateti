@@ -117,6 +117,7 @@ class TicTacToeGame {
             this.statusDisplay.classList.add('winner')
             this.statusDisplay.innerHTML = `Jugador ${this.currentPlayer} Ganó la partida!`
             this.gameActive = false
+            this.enableReplayButton()
             return
         }
 
@@ -125,10 +126,18 @@ class TicTacToeGame {
             this.statusDisplay.classList.add('draw')
             this.statusDisplay.innerHTML = `Nadie Gana Nadie Pierde!`
             this.gameActive = false
+            this.enableReplayButton()
             return
         }
 
         this.handlePlayerChange()
+    }
+
+    enableReplayButton() {
+        this.replayButton.removeAttribute('disabled')
+    }
+    disableReplayButton() {
+        this.replayButton.setAttribute('disabled', true)
     }
 
     updateStatusDisplay() {
@@ -137,6 +146,7 @@ class TicTacToeGame {
 
     handleRestartGame() {
         this.lastGameMoves = []
+        this.disableReplayButton()
         this.gameActive = true
         this.currentPlayer = 'X'
         this.gameState = Array(this.boardSize).fill('')
