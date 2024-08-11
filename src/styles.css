@@ -7,7 +7,7 @@
         @apply w-28 h-28 flex items-center justify-center text-2xl border border-purple-900 cursor-pointer rounded bg-purple-700 hover:bg-purple-800 duration-200 font-bold;
     }
     .btn {
-        @apply text-white px-4 py-2 rounded;
+        @apply text-white px-4 py-2 rounded duration-200 font-bold;
     }
 }
 body {

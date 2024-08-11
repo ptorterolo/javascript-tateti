@@ -7,6 +7,11 @@ class TicTacToeGame {
         this.currentPlayer = 'X'
         this.gameState = ['', '', '', '', '', '', '', '', '']
         this.gameActive = true
+
+        this.restartButton.addEventListener(
+            'click',
+            this.handleRestartGame.bind(this)
+        )
         this.init()
     }
     init() {
@@ -64,6 +69,14 @@ class TicTacToeGame {
 
     updateStatusDisplay() {
         this.statusDisplay.innerHTML = `Es el turno de ${this.currentPlayer}`
+    }
+
+    handleRestartGame() {
+        this.gameActive = true
+        this.currentPlayer = 'X'
+        this.gameState = ['', '', '', '', '', '', '', '', '']
+        this.renderBoard()
+        this.updateStatusDisplay()
     }
 }
 
