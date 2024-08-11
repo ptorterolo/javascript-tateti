@@ -12,6 +12,18 @@ class TicTacToeGame {
             'click',
             this.handleRestartGame.bind(this)
         )
+
+        this.winningConditions = [
+            [0, 1, 2], // Row
+            [3, 4, 5], // Row
+            [6, 7, 8], // Row
+            [0, 3, 6], // Column
+            [1, 4, 7], // Column
+            [2, 5, 8], // Column
+            [0, 4, 8], //Diagonal
+            [2, 4, 6], //Diagonal
+        ]
+
         this.init()
     }
     init() {
@@ -51,7 +63,7 @@ class TicTacToeGame {
         }
 
         this.handleCellPlayed(clickedCell, clickedCellIndex)
-        this.handlePlayerChange()
+        this.handleWinnerValidation()
     }
 
     handlePlayerChange() {
@@ -67,6 +79,40 @@ class TicTacToeGame {
         clickedCell.classList.add(cellColor)
     }
 
+    handleWinnerValidation() {
+        let roundHasWinner = false
+        for (let i = 0; i < this.winningConditions.length; i++) {
+            const condition = this.winningConditions[i]
+            let a = this.gameState[condition[0]]
+            let b = this.gameState[condition[1]]
+            let c = this.gameState[condition[2]]
+            if (a === '' || b === '' || c === '') {
+                continue
+            }
+            if (a === b && b === c) {
+                roundHasWinner = true
+                break
+            }
+        }
+
+        if (roundHasWinner) {
+            this.statusDisplay.classList.add('winner')
+            this.statusDisplay.innerHTML = `Jugador ${this.currentPlayer} Ganó la partida!`
+            this.gameActive = false
+            return
+        }
+
+        let roundDraw = !this.gameState.includes('')
+        if (roundDraw) {
+            this.statusDisplay.classList.add('draw')
+            this.statusDisplay.innerHTML = `Nadie Gana Nadie Pierde!`
+            this.gameActive = false
+            return
+        }
+
+        this.handlePlayerChange()
+    }
+
     updateStatusDisplay() {
         this.statusDisplay.innerHTML = `Es el turno de ${this.currentPlayer}`
     }
@@ -75,6 +121,7 @@ class TicTacToeGame {
         this.gameActive = true
         this.currentPlayer = 'X'
         this.gameState = ['', '', '', '', '', '', '', '', '']
+        this.statusDisplay.classList.remove('winner', 'draw')
         this.renderBoard()
         this.updateStatusDisplay()
     }
