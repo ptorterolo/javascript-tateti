@@ -5,6 +5,13 @@ class TicTacToeGame {
         this.restartButton = document.getElementById('restart-button')
         this.statusDisplay = document.getElementById('game-status')
         this.replayButton = document.getElementById('replay-button')
+        this.configButton = document.getElementById('game-config')
+        this.menuOptions = document.getElementById('menu-options')
+        this.closeModalBtn = document.getElementById('close-modal')
+        this.playerMode = document.querySelector(
+            'input[name="player-mode"]:checked'
+        ).value
+
         this.currentPlayer = 'X'
         this.gameState = Array(this.boardSize).fill('')
         this.gameActive = true
@@ -33,6 +40,22 @@ class TicTacToeGame {
             'click',
             this.handleReplayGame.bind(this)
         )
+        this.configButton.addEventListener(
+            'click',
+            this.handleMenuOptions.bind(this)
+        )
+        this.closeModalBtn.addEventListener(
+            'click',
+            this.handleMenuOptions.bind(this)
+        )
+        document
+            .querySelectorAll('input[name="player-mode"]')
+            .forEach((radio) => {
+                radio.addEventListener(
+                    'change',
+                    this.handlePlayerModeChange.bind(this)
+                )
+            })
     }
     init() {
         this.setListeners()
@@ -80,6 +103,14 @@ class TicTacToeGame {
 
         this.handleCellPlayed(clickedCell, clickedCellIndex)
         this.handleWinnerValidation()
+
+        if (
+            this.gameActive &&
+            this.currentPlayer === 'O' &&
+            this.playerMode === 'ai'
+        ) {
+            this.handleAIMove()
+        }
 
         if (this.replayButton.hasAttribute('disabled')) {
             this.enableReplayButton()
@@ -182,6 +213,30 @@ class TicTacToeGame {
                 }
             }, index * 500)
         })
+    }
+    handleMenuOptions() {
+        this.menuOptions.classList.toggle('block')
+    }
+    handlePlayerModeChange(event) {
+        this.playerMode = event.target.value
+        this.handleRestartGame()
+    }
+
+    handleAIMove() {
+        const availableCells = this.gameState
+            .map((cell, index) => (cell === '' ? index : null))
+            .filter((index) => index !== null)
+
+        if (availableCells.length > 0) {
+            const randomIndex =
+                availableCells[
+                    Math.floor(Math.random() * availableCells.length)
+                ]
+            const cells = document.querySelectorAll('.cell')
+            const cell = cells[randomIndex]
+            this.handleCellPlayed(cell, randomIndex)
+            this.handleWinnerValidation()
+        }
     }
 }
 
