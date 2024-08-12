@@ -4,7 +4,7 @@
 
 @layer components {
     .cell {
-        @apply w-28 h-28 flex items-center justify-center text-2xl border border-purple-900 cursor-pointer rounded bg-purple-700 hover:bg-purple-800 duration-200 font-bold;
+        @apply w-28 h-28 flex items-center justify-center border border-purple-900 cursor-pointer rounded bg-purple-700 hover:bg-purple-800 duration-200 font-lilita text-5xl text-shadow-white;
     }
     .btn {
         @apply text-white px-4 py-2 rounded duration-200 font-lilita text-xl rounded-lg;
@@ -39,6 +39,14 @@
         -1.75px 0 0 #191919, -1.6px -0.6px 0 #191919, -1.2px -1.2px 0 #191919,
         -0.6px -1.6px 0 #191919, 0 -1.75px 0 #191919, 0.6px -1.6px 0 #191919,
         1.2px -1.2px 0 #191919, 1.6px -0.6px 0 #191919;
+}
+.text-shadow-white {
+    text-shadow: 1px 1px 1px #fff, 1.6px 0.6px 0 #fff, 1.2px 1.2px 0 #fff,
+        0.6px 1.6px 0 #fff, 2.6px 1.75px 0 #fff, -0.6px 1.6px 0 #fff,
+        -1.2px 1.2px 0 #fff, -1.6px 0.6px 0 #fff, -1.75px 0 0 #fff,
+        -1.6px -0.6px 0 #fff, -1.2px -1.2px 0 #fff, -0.6px -1.6px 0 #fff,
+        0 -1.75px 0 #fff, 0.6px -1.6px 0 #fff, 1.2px -1.2px 0 #fff,
+        1.6px -0.6px 0 #fff;
 }
 body {
     display: flex;
