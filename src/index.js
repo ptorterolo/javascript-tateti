@@ -11,6 +11,8 @@ class TicTacToeGame {
         this.playerMode = document.querySelector(
             'input[name="player-mode"]:checked'
         ).value
+        this.aiLevelMenu = document.getElementById('ai-difficulty-menu')
+        this.levelOfDifficulty = 'easy' // todo make it dynamic based on user selection
 
         this.currentPlayer = 'X'
         this.gameState = Array(this.boardSize).fill('')
@@ -58,8 +60,16 @@ class TicTacToeGame {
             })
     }
 
+    handlePlayerModeChange(event) {
+        this.playerMode = event.target.value
+        this.toggleAiLevelMenu(this.playerMode)
+        this.handleRestartGame()
+    }
+
     renderBoard() {
         const boardElement = document.getElementById('game-board')
+
+        // TODO: make amount of columns dynamic when board size allows nxn grid
         boardElement.classList.add(
             'grid',
             'grid-cols-3',
@@ -85,39 +95,13 @@ class TicTacToeGame {
             boardElement.appendChild(cellDiv)
         }
     }
-
-    handleCellClick(event) {
-        const clickedCell = event.target
-
-        const clickedCellIndex = parseInt(
-            clickedCell.getAttribute('data-index')
-        )
-
-        if (this.gameState[clickedCellIndex] !== '' || !this.gameActive) {
-            return
-        }
-
-        this.handleCellPlayed(clickedCell, clickedCellIndex)
-        this.handleWinnerValidation()
-
-        if (
-            this.gameActive &&
-            this.currentPlayer === 'O' &&
-            this.playerMode === 'ai'
-        ) {
-            this.handleAIMove()
-        }
-
-        if (this.replayButton.hasAttribute('disabled')) {
-            this.enableReplayButton()
+    handleCellKeyDown(event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+            this.handleCellClick(event)
         }
     }
 
-    handlePlayerChange() {
-        this.currentPlayer = this.currentPlayer === 'X' ? 'O' : 'X'
-        this.updateStatusDisplay()
-    }
-
+    // GAME LOGIC
     handleCellPlayed(clickedCell, clickedCellIndex) {
         this.gameState[clickedCellIndex] = this.currentPlayer
         clickedCell.innerHTML = this.currentPlayer
@@ -167,58 +151,39 @@ class TicTacToeGame {
         this.handlePlayerChange()
     }
 
-    enableReplayButton() {
-        this.replayButton.removeAttribute('disabled')
-    }
-    disableReplayButton() {
-        this.replayButton.setAttribute('disabled', true)
-    }
+    handleCellClick(event) {
+        const clickedCell = event.target
 
-    updateStatusDisplay() {
-        this.statusDisplay.innerHTML = `Es el turno de ${this.currentPlayer}`
-    }
+        const clickedCellIndex = parseInt(
+            clickedCell.getAttribute('data-index')
+        )
 
-    handleRestartGame() {
-        this.lastGameMoves = []
-        this.disableReplayButton()
-        this.gameActive = true
-        this.currentPlayer = 'X'
-        this.gameState = Array(this.boardSize).fill('')
-        this.statusDisplay.classList.remove('winner', 'draw')
-        this.renderBoard()
-        this.updateStatusDisplay()
-    }
+        if (this.gameState[clickedCellIndex] !== '' || !this.gameActive) {
+            return
+        }
 
-    handleCellKeyDown(event) {
-        if (event.key === 'Enter' || event.key === ' ') {
-            this.handleCellClick(event)
+        this.handleCellPlayed(clickedCell, clickedCellIndex)
+        this.handleWinnerValidation()
+
+        if (
+            this.gameActive &&
+            this.currentPlayer === 'O' &&
+            this.playerMode === 'ai'
+        ) {
+            this.handleAIMove()
+        }
+
+        if (this.replayButton.hasAttribute('disabled')) {
+            this.enableReplayButton()
         }
     }
 
-    handleReplayGame() {
-        this.renderBoard()
-        this.gameActive = false
-        const cells = document.querySelectorAll('.cell')
-        this.lastGameMoves.forEach((move, index) => {
-            setTimeout(() => {
-                this.gameState[move.index] = move.player
-                cells[move.index].classList.add(move.color)
-                cells[move.index].innerHTML = move.player
-                if (index === this.lastGameMoves.length - 1) {
-                    this.gameActive = true
-                }
-            }, index * 500)
-        })
-    }
-    handleMenuOptions() {
-        this.menuOptions.classList.toggle('block')
-    }
-    handlePlayerModeChange(event) {
-        this.playerMode = event.target.value
-        this.handleRestartGame()
+    handlePlayerChange() {
+        this.currentPlayer = this.currentPlayer === 'X' ? 'O' : 'X'
+        this.updateStatusDisplay()
     }
 
-    handleAIMove() {
+    handleEasyAIMove() {
         const availableCells = this.gameState
             .map((cell, index) => (cell === '' ? index : null))
             .filter((index) => index !== null)
@@ -234,7 +199,74 @@ class TicTacToeGame {
             this.handleWinnerValidation()
         }
     }
+    handleHardAIMove() {
+        // todo
+    }
 
+    handleAIMove() {
+        switch (this.levelOfDifficulty) {
+            case 'hard':
+                this.handleHardAIMove()
+                break
+
+            default:
+                this.handleEasyAIMove()
+                break
+        }
+    }
+
+    // REPLAY GAME
+    enableReplayButton() {
+        this.replayButton.removeAttribute('disabled')
+    }
+    disableReplayButton() {
+        this.replayButton.setAttribute('disabled', true)
+    }
+    handleReplayGame() {
+        this.renderBoard()
+        this.gameActive = false
+        const cells = document.querySelectorAll('.cell')
+        this.lastGameMoves.forEach((move, index) => {
+            setTimeout(() => {
+                this.gameState[move.index] = move.player
+                cells[move.index].classList.add(move.color)
+                cells[move.index].innerHTML = move.player
+                if (index === this.lastGameMoves.length - 1) {
+                    this.gameActive = true
+                }
+            }, index * 500)
+        })
+    }
+    // RESTART GAME
+    handleRestartGame() {
+        this.lastGameMoves = []
+        this.disableReplayButton()
+        this.gameActive = true
+        this.currentPlayer = 'X'
+        this.gameState = Array(this.boardSize).fill('')
+        this.statusDisplay.classList.remove('winner', 'draw')
+        this.renderBoard()
+        this.updateStatusDisplay()
+    }
+
+    // UI
+    updateStatusDisplay() {
+        this.statusDisplay.innerHTML = `Es el turno de ${this.currentPlayer}`
+    }
+
+    handleMenuOptions() {
+        this.menuOptions.classList.toggle('block')
+    }
+
+    toggleAiLevelMenu(playerMode) {
+        if (playerMode === 'ai') {
+            this.aiLevelMenu.classList.remove('hidden')
+        } else {
+            this.aiLevelMenu.classList.add('hidden')
+        }
+    }
+
+    // INIT
     init() {
         this.setListeners()
         this.renderBoard()

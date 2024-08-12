@@ -101,6 +101,34 @@
                         <input type="radio" name="player-mode" value="ai" />
                         P1 vs CPU
                     </label>
+                    <div
+                        id="ai-difficulty-menu"
+                        class="hidden p-2 rounded-lg flex flex-col"
+                    >
+                        <h3
+                            class="text-2xl text-shadow text-amber-400 font-lilita uppercase text-center"
+                        >
+                            Nivel
+                        </h3>
+                        <label class="font-titan text-green-400">
+                            <input
+                                type="radio"
+                                name="difficulty"
+                                value="easy"
+                                checked
+                            />
+                            FÁCIL
+                        </label>
+                        <label class="font-titan text-red-400">
+                            <input
+                                type="radio"
+                                name="difficulty"
+                                value="hard"
+                                disabled
+                            />
+                            DÍFICIL
+                        </label>
+                    </div>
                     <button
                         id="close-modal"
                         class="btn text-shadow btn-secondary"
