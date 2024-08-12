@@ -13,6 +13,7 @@ class TicTacToeGame {
         ).value
         this.aiLevelMenu = document.getElementById('ai-difficulty-menu')
         this.levelOfDifficulty = 'easy'
+        this.aiDelay = 400
 
         this.currentPlayer = 'X'
         this.gameState = Array(this.boardSize).fill('')
@@ -298,15 +299,13 @@ class TicTacToeGame {
     }
 
     handleAIMove() {
-        switch (this.levelOfDifficulty) {
-            case 'hard':
+        setTimeout(() => {
+            if (this.levelOfDifficulty === 'hard') {
                 this.handleHardAIMove()
-                break
-
-            default:
+            } else {
                 this.handleEasyAIMove()
-                break
-        }
+            }
+        }, this.aiDelay)
     }
 
     // REPLAY GAME
