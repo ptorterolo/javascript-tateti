@@ -128,8 +128,21 @@ class TicTacToeGame {
         })
     }
 
+    updateUiWithMatchResult(hasWinner, text, winCondition = []) {
+        if (hasWinner) {
+            const cells = document.querySelectorAll('.cell')
+            winCondition.forEach((index) => {
+                cells[index].classList.add('!bg-green-500')
+            })
+        }
+        this.statusDisplay.classList.add(hasWinner ? 'winner' : 'draw')
+        this.statusDisplay.innerHTML = text
+        this.gameActive = false
+    }
+
     handleWinnerValidation() {
         let roundHasWinner = false
+        let winCondition
         for (let i = 0; i < this.winningConditions.length; i++) {
             const [a, b, c] = this.winningConditions[i]
             if (
@@ -143,24 +156,25 @@ class TicTacToeGame {
                 this.gameState[a] === this.gameState[b] &&
                 this.gameState[b] === this.gameState[c]
             ) {
+                winCondition = this.winningConditions[i]
                 roundHasWinner = true
                 break
             }
         }
 
         if (roundHasWinner) {
-            this.statusDisplay.classList.add('winner')
-            this.statusDisplay.innerHTML = `Jugador ${this.currentPlayer} Ganó la partida!`
-            this.gameActive = false
+            this.updateUiWithMatchResult(
+                true,
+                `Jugador ${this.currentPlayer} Ganó la partida!`,
+                winCondition
+            )
             this.enableReplayButton()
             return
         }
 
         let roundDraw = !this.gameState.includes('')
         if (roundDraw) {
-            this.statusDisplay.classList.add('draw')
-            this.statusDisplay.innerHTML = `Nadie Gana Nadie Pierde!`
-            this.gameActive = false
+            this.updateUiWithMatchResult(false, `Nadie Gana Nadie Pierde!`)
             this.enableReplayButton()
             return
         }
@@ -344,7 +358,13 @@ class TicTacToeGame {
 
     // UI
     updateStatusDisplay() {
-        this.statusDisplay.innerHTML = `Es el turno de ${this.currentPlayer}`
+        if (this.currentPlayer === 'O' && this.playerMode === 'ai') {
+            this.statusDisplay.innerHTML = `Es el turno de la CPU (O)`
+            return
+        }
+        this.statusDisplay.innerHTML = `Es el turno de ${
+            this.currentPlayer == 'X' ? 'P1 (X)' : 'P2 (O)'
+        }`
     }
 
     handleMenuOptions() {

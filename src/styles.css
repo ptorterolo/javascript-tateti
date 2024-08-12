@@ -4,7 +4,7 @@
 
 @layer components {
     .cell {
-        @apply w-28 h-28 flex items-center justify-center border border-purple-900 cursor-pointer rounded bg-purple-700 hover:bg-purple-800 duration-200 font-lilita text-5xl text-shadow-white;
+        @apply w-28 h-28 flex items-center justify-center border border-purple-900 cursor-pointer rounded bg-purple-700 hover:bg-purple-800 duration-200 font-lilita text-7xl text-shadow-white;
     }
     .btn {
         @apply text-white px-4 py-2 rounded duration-200 font-lilita text-xl rounded-lg;
