@@ -12,7 +12,7 @@ class TicTacToeGame {
             'input[name="player-mode"]:checked'
         ).value
         this.aiLevelMenu = document.getElementById('ai-difficulty-menu')
-        this.levelOfDifficulty = 'easy' // todo make it dynamic based on user selection
+        this.levelOfDifficulty = 'easy'
 
         this.currentPlayer = 'X'
         this.gameState = Array(this.boardSize).fill('')
@@ -58,6 +58,18 @@ class TicTacToeGame {
                     this.handlePlayerModeChange.bind(this)
                 )
             })
+        document
+            .querySelectorAll('input[name="difficulty"]')
+            .forEach((radio) => {
+                radio.addEventListener(
+                    'change',
+                    this.handleDifficultyChange.bind(this)
+                )
+            })
+    }
+
+    handleDifficultyChange(event) {
+        this.levelOfDifficulty = event.target.value
     }
 
     handlePlayerModeChange(event) {
@@ -118,14 +130,18 @@ class TicTacToeGame {
     handleWinnerValidation() {
         let roundHasWinner = false
         for (let i = 0; i < this.winningConditions.length; i++) {
-            const condition = this.winningConditions[i]
-            let a = this.gameState[condition[0]]
-            let b = this.gameState[condition[1]]
-            let c = this.gameState[condition[2]]
-            if (a === '' || b === '' || c === '') {
+            const [a, b, c] = this.winningConditions[i]
+            if (
+                this.gameState[a] === '' ||
+                this.gameState[b] === '' ||
+                this.gameState[c] === ''
+            ) {
                 continue
             }
-            if (a === b && b === c) {
+            if (
+                this.gameState[a] === this.gameState[b] &&
+                this.gameState[b] === this.gameState[c]
+            ) {
                 roundHasWinner = true
                 break
             }
@@ -199,8 +215,86 @@ class TicTacToeGame {
             this.handleWinnerValidation()
         }
     }
+
+    getBestMove() {
+        let bestScore = -Infinity
+        let move
+        for (let i = 0; i < this.gameState.length; i++) {
+            if (this.gameState[i] === '') {
+                this.gameState[i] = 'O'
+                let score = this.minimax(this.gameState, 0, false)
+                this.gameState[i] = ''
+                if (score > bestScore) {
+                    bestScore = score
+                    move = i
+                }
+            }
+        }
+        return move
+    }
+
+    minimax(board, depth, isMaximizing) {
+        let scores = {
+            X: -1,
+            O: 1,
+            draw: 0,
+        }
+
+        let result = this.checkWinner()
+        if (result !== null) {
+            return scores[result]
+        }
+
+        if (isMaximizing) {
+            let bestScore = -Infinity
+            for (let i = 0; i < board.length; i++) {
+                if (board[i] === '') {
+                    board[i] = 'O'
+                    let score = this.minimax(board, depth + 1, false)
+                    board[i] = ''
+                    bestScore = Math.max(score, bestScore)
+                }
+            }
+            return bestScore
+        } else {
+            let bestScore = Infinity
+            for (let i = 0; i < board.length; i++) {
+                if (board[i] === '') {
+                    board[i] = 'X'
+                    let score = this.minimax(board, depth + 1, true)
+                    board[i] = ''
+                    bestScore = Math.min(score, bestScore)
+                }
+            }
+            return bestScore
+        }
+    }
+
+    checkWinner() {
+        for (let i = 0; i < this.winningConditions.length; i++) {
+            const [a, b, c] = this.winningConditions[i]
+            if (
+                this.gameState[a] &&
+                this.gameState[a] === this.gameState[b] &&
+                this.gameState[a] === this.gameState[c]
+            ) {
+                return this.gameState[a]
+            }
+        }
+
+        if (!this.gameState.includes('')) {
+            return 'draw'
+        }
+
+        return null
+    }
+
     handleHardAIMove() {
-        // todo
+        const bestMove = this.getBestMove()
+        const cells = document.querySelectorAll('.cell')
+        const cell = cells[bestMove]
+        this.handleCellPlayed(cell, bestMove)
+        this.handleWinnerValidation()
     }
 
     handleAIMove() {
