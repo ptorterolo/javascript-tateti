@@ -57,11 +57,7 @@ class TicTacToeGame {
                 )
             })
     }
-    init() {
-        this.setListeners()
-        this.renderBoard()
-        this.updateStatusDisplay()
-    }
+
     renderBoard() {
         const boardElement = document.getElementById('game-board')
         boardElement.classList.add(
@@ -237,6 +233,12 @@ class TicTacToeGame {
             this.handleCellPlayed(cell, randomIndex)
             this.handleWinnerValidation()
         }
+    }
+
+    init() {
+        this.setListeners()
+        this.renderBoard()
+        this.updateStatusDisplay()
     }
 }
 

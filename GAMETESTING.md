@@ -33,7 +33,7 @@ test('Game should be initialized correctly', () => {
 - Ensure game is marked as inactive after a win.
 
 ### Restart Game Tests
-- After restar button is clicked board should be empty.
+- After restart button is clicked board should be empty.
 - Game status, current player, records from last movements should be reset to default values.
 
 Approach
